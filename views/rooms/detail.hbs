@@ -2,8 +2,22 @@
 <h3>Price (per night): {{room.price}}</h3>
 <p>Description: {{room.description}}</p>
 <p>Posted by {{room.owner.username}}</p>
-{{!-- protect the delete route --}}
-{{!-- only show this link for the owner of the room --}}
+
+{{#if room.comments}}
+<h2>Comments</h2>
+{{#each room.comments}}
+<p>{{content}} <i>{{author.username}}</i></p>
+{{/each}}
+{{/if}}
+
+
+{{#if user}}
+<form action="/rooms/{{room._id}}/comments" method="POST">
+  <label for="message">Add a comment</label>
+  <input type="text" name="content" id="message">
+  <button type="submit">Send</button>
+</form>
+{{/if}}
 
 {{#if showDelete}}
 <a href="/rooms/{{room._id}}/delete">Delete this room</a>
