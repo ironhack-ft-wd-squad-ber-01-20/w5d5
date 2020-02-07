@@ -69,6 +69,31 @@ router.get("/rooms/:id", (req, res, next) => {
     });
 });
 
+router.get("/rooms/:id/comments", (req, res, next) => {
+  // 6 the axios get request is detected and handled
+  Room.findById(req.params.id)
+    // .populate("owner comments")
+    .populate({
+      path: "comments",
+      populate: {
+        path: "author"
+      }
+    })
+    .then(room => {
+      const comments = room.comments.map(comment => {
+        return {
+          content: comment.content,
+          author: comment.author.username
+        };
+      });
+      // 7 we respond with the list of comments obtained from the database for the given room -> FRONTEND
+      res.json(comments);
+    })
+    .catch(err => {
+      next(err);
+    });
+});
+
 router.get("/rooms/:id/delete", (req, res, next) => {
   // if (req.user.role === "moderator") {
   //   Room.deleteOne({ _id: req.params.id })
@@ -108,6 +133,7 @@ router.get("/rooms/:id/delete", (req, res, next) => {
 });
 
 router.post("/rooms/:id/comments", loginCheck, (req, res, next) => {
+  // 2 the axios POST request is detected and handled
   const content = req.body.content;
   const author = req.user._id;
   const roomId = req.params.id;
@@ -125,7 +151,8 @@ router.post("/rooms/:id/comments", loginCheck, (req, res, next) => {
       );
     })
     .then(() => {
-      res.redirect(`/rooms/${roomId}`);
+      // 3 once the comment has been created and the Room.comments updated, we send a response -> FRONTEND
+      res.json({});
     })
     .catch(err => {
       next(err);

@@ -1,18 +1,20 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+
 <h2>{{room.name}}</h2>
 <h3>Price (per night): {{room.price}}</h3>
 <p>Description: {{room.description}}</p>
 <p>Posted by {{room.owner.username}}</p>
 
-{{#if room.comments}}
 <h2>Comments</h2>
-{{#each room.comments}}
-<p>{{content}} <i>{{author.username}}</i></p>
-{{/each}}
-{{/if}}
+<div id="comment-box">
+  {{#each room.comments}}
+  <p>{{content}} <i>{{author.username}}</i></p>
+  {{/each}}
+</div>
 
 
 {{#if user}}
-<form action="/rooms/{{room._id}}/comments" method="POST">
+<form>
   <label for="message">Add a comment</label>
   <input type="text" name="content" id="message">
   <button type="submit">Send</button>
@@ -22,3 +24,5 @@
 {{#if showDelete}}
 <a href="/rooms/{{room._id}}/delete">Delete this room</a>
 {{/if}}
+
+<script src="/javascripts/comments.js"></script>
