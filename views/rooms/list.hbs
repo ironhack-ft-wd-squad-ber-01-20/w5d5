@@ -1,0 +1,15 @@
+{{#if rooms}}
+<h1>Rooms</h1>
+<ul>
+  {{#each rooms}}
+  <li><a href="/rooms/{{_id}}">{{name}} {{price}} euro</a></li>
+  {{/each}}
+</ul>
+{{else}}
+<h1>No room to display!</h1>
+{{/if}}
+
+<a href="/">Home</a>
+{{#if user}}
+<a href="/rooms/new">Create a room</a>
+{{/if}}
