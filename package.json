@@ -1,10 +1,10 @@
 {
-  "name": "w5d5",
+  "name": "ironbnb",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "DEBUG=w5d5:* nodemon ./bin/www",
+    "dev": "DEBUG=ironbnb:* nodemon ./bin/www",
     "dev-windows": "nodemon ./bin/www"
   },
   "dependencies": {

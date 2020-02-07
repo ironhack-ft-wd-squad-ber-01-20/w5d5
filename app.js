@@ -14,7 +14,7 @@ const MongoStore = require("connect-mongo")(session);
 const flash = require("connect-flash");
 
 mongoose
-  .connect("mongodb://localhost/w5d5", { useNewUrlParser: true })
+  .connect("mongodb://localhost/ironbnb", { useNewUrlParser: true })
   .then(x => {
     console.log(
       `Connected to Mongo! Database name: "${x.connections[0].name}"`
@@ -63,7 +63,7 @@ hbs.registerHelper("ifUndefined", (value, options) => {
 });
 
 // default value for title local
-app.locals.title = "IronRooms";
+app.locals.title = "IronBNB";
 
 // Enable authentication using session + passport
 app.use(
