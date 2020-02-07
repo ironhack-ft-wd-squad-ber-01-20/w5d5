@@ -49,8 +49,8 @@ router.post("/signup", (req, res, next) => {
 
     newUser
       .save()
-      .then(() => {
-        req.login(err => {
+      .then(newUser => {
+        req.login(newUser, err => {
           if (err) return next(err);
           res.redirect("/");
         });

@@ -1,4 +1,10 @@
 <h2>{{room.name}}</h2>
 <h3>Price (per night): {{room.price}}</h3>
 <p>Description: {{room.description}}</p>
+<p>Posted by {{room.owner.username}}</p>
+{{!-- protect the delete route --}}
+{{!-- only show this link for the owner of the room --}}
+
+{{#if showDelete}}
 <a href="/rooms/{{room._id}}/delete">Delete this room</a>
+{{/if}}

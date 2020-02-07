@@ -12,16 +12,25 @@ router.get("/rooms", (req, res) => {
     });
 });
 
-router.get("/rooms/new", (req, res) => {
+const loginCheck = (req, res, next) => {
+  if (req.user) {
+    next();
+  } else {
+    res.redirect("/");
+  }
+};
+
+router.get("/rooms/new", loginCheck, (req, res) => {
   res.render("rooms/add.hbs");
 });
 
-router.post("/rooms", (req, res, next) => {
+router.post("/rooms", loginCheck, (req, res, next) => {
   const { name, description, price } = req.body;
   Room.create({
     name,
     description,
-    price
+    price,
+    owner: req.user._id
   })
     .then(() => {
       res.redirect("/rooms");
@@ -33,8 +42,11 @@ router.post("/rooms", (req, res, next) => {
 
 router.get("/rooms/:id", (req, res, next) => {
   Room.findById(req.params.id)
+    .populate("owner")
     .then(room => {
-      res.render("rooms/detail.hbs", { room });
+      const showDelete = room.owner._id.toString() === req.user._id.toString();
+
+      res.render("rooms/detail.hbs", { room, showDelete: showDelete });
     })
     .catch(err => {
       next(err);
