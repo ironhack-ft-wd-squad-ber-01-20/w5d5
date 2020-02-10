@@ -49,6 +49,7 @@
   })
 
   map.addControl(geolocate, 'top-right'); // show the controls on top right of the map
+  let test = true
 
 
   const roomId = location.pathname.split('/')[2]
@@ -67,7 +68,7 @@
       const coord = data.target.getLngLat().toArray()
 
       axios.patch(`http://localhost:3000/rooms/${roomId}`, { coordinates: coord }).then(() => {
-        console.log("Room updated!")
+        console.log("Room updated!") // Room was updated here!
       }).catch(err => {
         console.log(err);
       })
