@@ -5,9 +5,6 @@
 <p>Description: {{room.description}}</p>
 <p>Posted by {{room.owner.username}}</p>
 
-<button id="add-marker">
-  Add a marker
-</button>
 <div id='map' style='width: 400px; height: 300px;'></div>
 
 <h2>Comments</h2>
@@ -57,7 +54,7 @@
   const roomId = location.pathname.split('/')[2]
   axios.get(`http://localhost:3000/rooms/${roomId}/coordinates`).then(response => {
     let coordinates = response.data;
-    if (!coordinates.length) coordinates = map.getCenter(); // if the room didn't have coordinates, we'll use the center of the map temporarily to display the marker
+    if (!coordinates.length) coordinates = map.getCenter();
 
     const marker = new mapboxgl.Marker(
       { draggable: true }
