@@ -5,6 +5,11 @@
 <p>Description: {{room.description}}</p>
 <p>Posted by {{room.owner.username}}</p>
 
+<button id="add-marker">
+  Add a marker
+</button>
+<div id='map' style='width: 400px; height: 300px;'></div>
+
 <h2>Comments</h2>
 <div id="comment-box">
   {{#each room.comments}}
@@ -24,5 +29,60 @@
 {{#if showDelete}}
 <a href="/rooms/{{room._id}}/delete">Delete this room</a>
 {{/if}}
+
+
+
+<script>
+  mapboxgl.accessToken =
+    "pk.eyJ1IjoibWppaCIsImEiOiJjanVwb3p2M2kxczk2M3ptcDRlc2cwYTZpIn0.B8dDJ9aejgRYjjc1hh2w1g";
+  const map = new mapboxgl.Map({
+    container: "map",
+    style: "mapbox://styles/mjih/ck6fkrthf7xq31io06u4kehl7",
+    center: [13.405, 52.52],
+    zoom: 12,
+    maxBounds: [[13.2, 52.4], [13.6, 52.65]],
+  });
+
+  const nav = new mapboxgl.NavigationControl();
+  map.addControl(nav, 'top-right');
+
+  const geolocate = new mapboxgl.GeolocateControl({
+    showUserLocation: false,
+    trackUserLocation: true
+  })
+
+  map.addControl(geolocate, 'top-right');
+
+
+  const roomId = location.pathname.split('/')[2]
+  axios.get(`http://localhost:3000/rooms/${roomId}/coordinates`).then(response => {
+    const coordinates = response.data;
+    const marker = new mapboxgl.Marker(
+      { draggable: true }
+    );
+
+    marker.setLngLat(coordinates);
+    marker.addTo(map);
+
+    marker.on('dragend', (data) => {
+      const coord = data.target.getLngLat().toArray()
+
+      axios.patch(`http://localhost:3000/rooms/${roomId}`, { coordinates: coord }).then(() => {
+        console.log("Room updated!")
+      }).catch(err => {
+        console.log(err);
+      })
+    })
+
+  }).catch(err => {
+    console.log(err);
+  })
+
+
+
+
+
+</script>
+
 
 <script src="/javascripts/comments.js"></script>

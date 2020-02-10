@@ -159,4 +159,26 @@ router.post("/rooms/:id/comments", loginCheck, (req, res, next) => {
     });
 });
 
+router.patch("/rooms/:id", (req, res, next) => {
+  const changes = req.body; // in our axios call on the front-end, we'll make sure to pass the fields that need to be updated
+  Room.updateOne({ _id: req.params.id }, changes)
+    .then(() => {
+      // successful update, we can send a response
+      res.json();
+    })
+    .catch(err => {
+      next(err);
+    });
+});
+
+router.get("/rooms/:id/coordinates", (req, res, next) => {
+  Room.findById(req.params.id)
+    .then(roomDocument => {
+      res.json(roomDocument.coordinates);
+    })
+    .catch(err => {
+      next(err);
+    });
+});
+
 module.exports = router;
