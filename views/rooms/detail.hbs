@@ -56,7 +56,9 @@
 
   const roomId = location.pathname.split('/')[2]
   axios.get(`http://localhost:3000/rooms/${roomId}/coordinates`).then(response => {
-    const coordinates = response.data;
+    let coordinates = response.data;
+    if (!coordinates.length) coordinates = map.getCenter(); // if the room didn't have coordinates, we'll use the center of the map temporarily to display the marker
+
     const marker = new mapboxgl.Marker(
       { draggable: true }
     );
